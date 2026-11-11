@@ -1,0 +1,20 @@
+{
+  "default_blocklist": [
+    "youtube.com",
+    "www.youtube.com",
+    "m.youtube.com",
+    "youtu.be"
+  ],
+  "focus_minutes": 90,
+  "break_interval_minutes": 90,
+  "break_minutes": 10,
+  "reward_focus_minutes": 90,
+  "reward_minutes": 10,
+  "min_reward_session_minutes": 25,
+  "daily_reward_limit_minutes": 60,
+  "block_outside_sessions": true,
+  "strict_mode": false,
+  "api_host": "127.0.0.1",
+  "api_port": 8765,
+  "hosts_path": null
+}

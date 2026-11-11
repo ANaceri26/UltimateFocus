@@ -1,0 +1,84 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  python:
+    name: Python ${{ matrix.python }} on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python: ["3.11", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+          cache: pip
+      - run: python -m pip install pytest ruff
+      - run: ruff check .
+      - run: ruff format --check .
+      - run: python -m pytest
+
+  go:
+    name: Go DNS resolver
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: dns
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: dns/go.mod
+          cache-dependency-path: dns/go.mod
+      - name: gofmt
+        run: test -z "$(gofmt -l .)" || (gofmt -l . && exit 1)
+      - run: go vet ./...
+      - run: go test -race -count=1 ./...
+      - name: Cross-compile for Windows
+        run: GOOS=windows GOARCH=amd64 go build -trimpath -o ../dist/focusdns.exe ./cmd/focusdns
+
+  perl:
+    name: Perl analytics
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: perl -c analytics/report.pl
+      - run: prove -v analytics/t
+
+  release:
+    name: Windows release build
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: [python, go, perl]
+    runs-on: windows-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: dns/go.mod
+      - name: Build FocusLock.exe, focuslock-cli.exe and focusdns.exe
+        shell: cmd
+        run: scripts\build.bat
+      - name: Publish GitHub release (v0.x tags are marked pre-release)
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          $extra = @()
+          if ($env:GITHUB_REF_NAME -like "v0.*") { $extra += "--prerelease" }
+          gh release create $env:GITHUB_REF_NAME dist/FocusLock.exe dist/focuslock-cli.exe dist/focusdns.exe --generate-notes @extra
