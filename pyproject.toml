@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "focuslock"
-version = "0.3.0"
+version = "1.0.0"
 description = "Windows focus app: website blocking, focus sessions, breaks and earned reward time"
 readme = "README.md"
 requires-python = ">=3.11"

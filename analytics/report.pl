@@ -18,7 +18,7 @@ use JSON::PP ();
 use POSIX qw(strftime);
 use Time::Local qw(timegm);
 
-our $VERSION = '0.3.0';
+our $VERSION = '1.0.0';
 my $BAR_WIDTH = 40;
 my $LOG_NAME  = qr/\A(?:focuslock|focusdns)\.log(?:\.\d+)?\z/;
 
