@@ -30,6 +30,15 @@ You can move `FocusLock.exe` anywhere, e.g. your Desktop. Your settings and hist
 
 ## Using FocusLock
 
+Use the left menu to move between **Focus**, **Blocklist**, **Rewards**, **Stats** and
+**Preferences**. The **View** menu and **Ctrl+1** through **Ctrl+5** do the same.
+Preferences includes a **Reduce motion** option for page transitions and a summary
+of your current session rules. The motion option applies to the current window.
+
+Only the fields for your chosen mode appear: a duration for Timer, a goal for Goal,
+and neither for Flow. During a session, those controls are locked to the active
+session. Flow counts up and offers optional break reminders.
+
 ### Choose what to block
 
 Open the **Blocklist** tab, type a site (for example `netflix.com`) and click **Add**. Tick **+ www.** to block the `www.` version too. YouTube is blocked from the start.
@@ -56,7 +65,8 @@ Every completed session of at least 25 minutes earns reward time (90 minutes of 
 
 ### Your progress
 
-The **Stats** tab shows how long you focused each day, your streak of focused days, and how many times you tried to cheat.
+The **Stats** page shows how long you focused each day, your streak of focused days,
+and recent protection activity, such as early closes and password overrides.
 
 ## Making it hard to cheat
 
